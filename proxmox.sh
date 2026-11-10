@@ -120,6 +120,11 @@ echo
 echo "${G}${B}Fertig.${N} Container $AO_ID ($AO_HOST) startet ab jetzt mit Proxmox."
 echo
 pct exec "$AO_ID" -- /usr/local/bin/agraropen || true
+if [ "$AO_IP" = dhcp ]; then
+  MAC=$(pct config "$AO_ID" | sed -n 's/^net0:.*hwaddr=\([0-9A-Fa-f:]*\).*/\1/p')
+  echo "  ${Y}Adresse per DHCP:${N} im Router für MAC ${B}${MAC:-?}${N} eine feste Adresse vergeben, dann  pct reboot $AO_ID"
+  echo "  – am besten bevor Handy und PC verbunden werden (sie merken sich die Adresse)."
+fi
 echo "  Später wieder anzeigen: in der Container-Konsole, oder hier:  pct exec $AO_ID -- agraropen"
 echo "  Updates kommen über die App (Einrichten → Betrieb und Daten → Hof-Server)."
 echo
